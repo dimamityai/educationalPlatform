@@ -1,0 +1,15 @@
+//чтобы перейти к фронту нужно написать
+cd client
+
+//с помощью ультилиты create-react-app разворачиваем react приложение
+npx create-react-app //после установки можно оставить только App.js index.js в папке src
+
+//После нужно установить необходимые зависимости
+// axios - чтобы отправять запросы на сервер
+// react-router-dom - для подстраничной навигации
+// mobx - statemanager
+// mobx-react-lite - чтобы связать mobx с функциональными компонентами реакта
+npm i axios react-router-dom mobx mobx-react-lite
+
+//так же потребуется bootstrap, чтобы версать можно было быстрее
+//нужно перйти на сайт bootstrap и от туда взять скрипт для установки и добавить стили link в index.html папка public

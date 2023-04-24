@@ -1,0 +1,15 @@
+.user__infromation__item{
+    display: flex;
+    margin-left: 10px;
+}
+
+.user__infromation__data{
+    width: 150px;
+    margin-top: 7px;
+}
+
+.user__infromation__input{
+    margin-top: 6px;
+    border-radius: 10px;
+    width: 80%;
+}

@@ -1,0 +1,29 @@
+.user__infromation{
+    display: flex;
+    flex-direction: column;
+    margin-top: 6px;
+    border: 1px solid black;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.user__list{
+    margin-top: 6px;
+    margin-right: 60px;
+    width: 200px;
+}
+
+.user__infromation__item{
+    display: flex;
+    margin-left: 10px;
+}
+
+.user__infromation__data{
+    width: 150px;
+    margin-top: 7px;
+}
+
+.user__infromation__input{
+    margin-top: 6px;
+    width: 80%;
+}
