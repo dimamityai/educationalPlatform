@@ -1,6 +1,1 @@
-### educationalPlatform
-PERN stack PostgreSQL + express + React js + node.js
 
-Backend - postgreSQL, диаграмма базы данных (модели данных, связи), middleware, jwt токен, bcrypt, фильрация, регистраиция, авторизация...
-
-Frontend - React, mobx...
