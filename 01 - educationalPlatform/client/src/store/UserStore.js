@@ -8,6 +8,7 @@ export default class UserStore {
         this._isAuth = false;
         this._user = {};
         this._isLoading = false;
+        this._testResults = [];
         //mobx будет следить за изменениями объектов this, если они изменяются то компоненты будут перендероваться
         makeAutoObservable(this);
     }
@@ -20,7 +21,11 @@ export default class UserStore {
     setIsAuth(bool){
         this._isAuth = bool;
     }
-    
+
+    setTestResults(testResults){
+        this._testResults = testResults;
+    }
+
     setUser(user){
         this._user = user;
     }
@@ -36,5 +41,9 @@ export default class UserStore {
 
     get user(){
         return this._user;
+    }
+
+    get testResults(){
+        return this._testResults;
     }
 }

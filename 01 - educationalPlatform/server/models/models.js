@@ -3,19 +3,10 @@
 //импортируем файл sequelize, который создан в db.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
-//из самого пакета sequelize имопортируем DataTypes, с ее помощью будут описаны соответствующие типы того или иного проля стринг и тд
 
-
-/////////////////////описание моделей//////////////////////////
-
-//Модель - пользователь
-//sequelize.define | первый параметр - название модели | второй параметр - объект с полями модели
 const User = sequelize.define('user', {
-    //id пользователя
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    //email пользователя - уникальный
     email: {type: DataTypes.STRING, unique: true},
-    //пароль 
     password: {type: DataTypes.STRING},
     name: {type: DataTypes.STRING},
     surname: {type: DataTypes.STRING},
@@ -23,8 +14,13 @@ const User = sequelize.define('user', {
     gender: {type: DataTypes.STRING},
     country: {type: DataTypes.STRING},
     city: {type: DataTypes.STRING},
-    //роль (USER, ADMIN)
     role: {type: DataTypes.STRING, defaultValue: "USER"}
+})
+
+//Модель - информация о тесте(его содержимое)
+const User_test_result = sequelize.define('user_test_result', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    result: {type: DataTypes.INTEGER, allowNull: false},
 })
 
 //Модель - Избранное
@@ -74,6 +70,9 @@ Favorites.belongsTo(User); //Favorites принадлежит User
 //Один user может иметь много тестов
 User.hasMany(Test);
 Test.belongsTo(User);
+//Один user может иметь много пройденных тестов
+User.hasMany(User_test_result,{as: 'user_test_info'});
+User_test_result.belongsTo(User);
 
 /////////////////////////Favorites////////////////////////////////////////
 //В favorites может быть много Favorites_school
@@ -93,7 +92,9 @@ User.belongsTo(School);
 //В favorites_school - одна школа
 Test.hasMany(Test_info, {as: 'info'});
 Test_info.belongsTo(Test);
-
+//Один test может содержать как пройденный у множество пользователей
+Test.hasMany(User_test_result);
+User_test_result.belongsTo(Test);
 /////////////////////////Test_type////////////////////////////////////////
 Test_type.hasMany(Test);
 Test.belongsTo(Test_type);
@@ -106,5 +107,6 @@ module.exports = {
     Favorites_school,
     Test,
     Test_info,
-    Test_type
+    Test_type,
+    User_test_result,
 }

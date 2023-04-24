@@ -1,18 +1,40 @@
 //страница конкретнго теста
-import React, {useEffect, useState} from "react";
-import { Container } from "react-bootstrap";
+import React, {useContext, useEffect, useState} from "react";
+import {Button, Container} from "react-bootstrap";
 import styles from './TestPage.module.css'
 import MyInput from "../../UI/input/MyInput";
 import MyButton from '../../UI/button/MyButton';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {fetchOneTest} from "../../http/testAPI";
+import {Context} from "../../index";
+import {
+    check,
+    createUserTestResult,
+    fetchCreateUserTestResult,
+    fetchOneUser,
+    fetchUserTestResult
+} from "../../http/userAPI";
+import {MAIN_ROUTE} from "../../utils/const";
 
 const TestPage = () =>{
+    const {user} = useContext(Context)
+    const navigate = useNavigate();
+    const [readyTask, setReadyTask] = useState(0);
+    const [testResult, setTestResult] = useState({})
     const [test, setTest] = useState({info : []});
     const {id} = useParams()
 
     useEffect(() => {
-
+        check().then(res => fetchOneUser(res.id)
+            .then(res => {
+                user.setUser(res)
+                fetchUserTestResult(user.user.id, id).then(res => {
+                        console.log(res)
+                        setTestResult(res)
+                        setReadyTask(res.rows[0].result)
+                    }
+                )
+            }))
         fetchOneTest(id).then(data => {
             return setTest(data)
         })
@@ -20,14 +42,13 @@ const TestPage = () =>{
 
 
 
-    const [readyTask, setReadyTask] = useState(0);
-    const readyRaskArr = {};
+    const readyTaskArr = {};
     const checkFormToAnswer = (event, id) =>{
-        if (!readyRaskArr[id]){
+        if (!readyTaskArr[id]){
                 if (event.target.value.length === 1){
                     setReadyTask((prev) => prev + 1)
                 }
-                readyRaskArr[id] = 1;
+                readyTaskArr[id] = 1;
                 return
             }
         if (event.target.value.length === 0){
@@ -37,7 +58,6 @@ const TestPage = () =>{
             })
         }
     }
-
 
     return (
         <Container>
@@ -49,7 +69,9 @@ const TestPage = () =>{
                     {test.contents}
                 </div>
             </div>
+
             <div className={styles.task__layout}>
+                {!testResult.count &&
                 <div className={styles.task__content}>
                     {test.info.map(task =>
                         <div 
@@ -65,14 +87,34 @@ const TestPage = () =>{
                             <MyInput placeholder = 'Ответ' onChange = {(event) => checkFormToAnswer(event, task.id)}/>
                         </div>    
                     )}
-                </div>
-                <div 
+                </div>}
+                <div
+
+                    style={testResult.count ?
+                        {width: '100%', marginLeft: -2}
+                        : {}}
                     className={styles.task__form__asnwer}
                 >
                     <div className={styles.task__form__asnwer__item}>
                         Выполнено заданий: {readyTask} из {test.info.length}
                     </div>
-                    <MyButton style={{borderRadius: 5, marginLeft: 30, width: 200}}>Завершить</MyButton>
+                    <Button
+                        variant={"outline-success"}
+                        style={{borderRadius: 5, marginLeft: 30, width: 200}}
+                        onClick={()=> {
+                            if (testResult.count){
+                                navigate(MAIN_ROUTE)
+                            }
+                            else if (user.user.id){
+                                createUserTestResult(readyTask, user.user.id, id)
+                                navigate(MAIN_ROUTE)
+                            } else {
+                                alert('Не авторизован')
+                            }
+                        }}
+                    >
+                        Завершить
+                    </Button>
                 </div>
             </div>
         </Container>

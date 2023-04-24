@@ -24,3 +24,25 @@ export const fetchOneUser = async (id) =>{
     const {data} = await $authHost.get('api/user/information/' + id)
     return data
 }
+
+export const createUserTestResult = async (result, userId, testId) =>{
+    const {data} = await $authHost.post('api/usertestresult', {result, userId, testId})
+    return data
+}
+
+export const fetchUserTestResult = async (userId, testId) =>{
+    let res;
+    if (userId && testId){
+        const {data} = await $authHost.get('api/usertestresult?' + 'userId=' + userId +'&testId=' + testId)
+        res = data
+    }
+    else if (userId) {
+        const {data} = await $authHost.get('api/usertestresult?' + 'userId=' + userId)
+        res = data
+    }
+    else if (testId){
+        const {data} = await $authHost.get('api/usertestresult?' + 'testId=' + testId)
+        res = data
+    }
+    return res
+}

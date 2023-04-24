@@ -1,20 +1,20 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Container} from "react-bootstrap";
-import {check, fetchOneUser, getOne} from "../../http/userAPI";
+import {check, fetchOneUser, fetchUserTestResult} from "../../http/userAPI";
 import {Context} from "../../index";
-import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "./UserPage.module.css"
-import Form from "react-bootstrap/Form";
-import * as PropTypes from "prop-types";
-import MyInput from "../../UI/input/MyInput";
-import DivForUserInformation from "../../UI/div/DivForUserInformation/DivForUserInformation";
 import {observer} from "mobx-react-lite";
+import {useNavigate} from "react-router-dom";
+import UserInformationList from "../../components/userInformationList/UserInformationList";
+import UserResultList from "../../components/userResultList/UserResultList";
 
 
 const UserPage = observer(() => {
     const {user} = useContext(Context)
-    const logOut = () =>{
+    const navigate = useNavigate();
+    const [userChoose, setUserChoose] = useState('info');
+    const logOut = () => {
         user.setUser({})
         user.setIsAuth(false)
         localStorage.removeItem('token')
@@ -22,23 +22,32 @@ const UserPage = observer(() => {
 
     useEffect(() => {
         check().then(res => fetchOneUser(res.id)
-                            .then(res => {
-                                console.log(res)
-                                user.setUser(res)
-        }))}, [])
+            .then(res => {
+                console.log(res)
+                user.setUser(res)
+                fetchUserTestResult(user.user.id)
+                    .then(res => {
+                        console.log(res)
+                        user.setTestResults(res)
+                    })
+            }))
+    }, [])
 
     return (
         <Container className="d-flex flex-row">
             <ListGroup className={styles.user__list}>
                 <ListGroup.Item
                     action
+                    onClick={() => {
+                        setUserChoose('info')
+                    }}
                 >
                     О себе
                 </ListGroup.Item>
                 <ListGroup.Item
                     action
                     onClick={() => {
-                        // logOut()
+                        setUserChoose('result')
                     }}
                 >
                     Результаты
@@ -53,16 +62,10 @@ const UserPage = observer(() => {
                 </ListGroup.Item>
             </ListGroup>
             <div className={styles.user__infromation}>
-                <DivForUserInformation title = {"Имя"} value = {user.user.name}/>
-                <DivForUserInformation title = {"Фамилия"} value = {user.user.surname}/>
-                <DivForUserInformation title = {"Отчевство"} value = {user.user.patronymic}/>
-                <DivForUserInformation title = {"Почта"} value = {user.user.email}/>
-                <DivForUserInformation title = {"Пол"} value = {user.user.gender}/>
-                <DivForUserInformation title = {"Страна"} value = {user.user.country}/>
-                <DivForUserInformation title = {"Город"} value = {user.user.city}/>
-                <DivForUserInformation title = {"Школа"} value = {user.user.email}/>
-                <DivForUserInformation title = {"Роль"} value = {user.user.role}/>
-                <DivForUserInformation style = {{marginBottom: 6}} title = {"id"} value = {user.user.id}/>
+                {(userChoose === 'info') &&
+                    <UserInformationList user={user}/>}
+                {(userChoose === 'result') &&
+                    <UserResultList user={user}/>}
             </div>
         </Container>
     );

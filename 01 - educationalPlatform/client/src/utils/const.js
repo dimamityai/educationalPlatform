@@ -18,3 +18,5 @@ export const FAVORITES_ROUTE = '/favorites'
 
 //маршрут для url тестов
 export const TEST_ROUTE = '/test'
+
+export const USER_TEST_RESULT_ROUTE = '/usertestresult'

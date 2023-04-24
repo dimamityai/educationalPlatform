@@ -7,13 +7,18 @@ import { Col, Dropdown, Row } from "react-bootstrap";
 import {createTest, fetchTypes} from "../../http/testAPI";
 import {fetchSchools} from "../../http/schoolAPI";
 import {observer} from "mobx-react-lite";
+import {check, fetchOneUser} from "../../http/userAPI";
 
 const CreateTest = observer(({show, onHide}) => {
   const {test} = useContext(Context)
-
+  const {user} = useContext(Context)
   useEffect(() => {
       fetchTypes().then(data => test.setTypes(data))
       fetchSchools().then(data => test.setSchool(data))
+      check().then(res => fetchOneUser(res.id)
+        .then(res => {
+          user.setUser(res)
+        }))
   }, [])
 
   const [testName, setTestName] = useState('')
@@ -34,7 +39,7 @@ const CreateTest = observer(({show, onHide}) => {
     const formData = new FormData()
     formData.append('name', testName)
     formData.append('contents', '')
-    formData.append('userId', '1')
+    formData.append('userId', user.user.id)
     formData.append('schoolId', test.selectedSchool.id)
     formData.append('testTypeId', test.selectedType.id)
     formData.append('info', JSON.stringify(info))

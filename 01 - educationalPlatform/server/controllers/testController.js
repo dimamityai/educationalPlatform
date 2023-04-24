@@ -6,7 +6,6 @@ class TestController {
         try{
         let {name, contents, userId, schoolId, testTypeId, info} = req.body
         const test = await Test.create({name, contents, userId, schoolId, testTypeId})
-        
         if (info){
             //на фронте в будущем переводим info в строку, а здесь обратно в json
             info = JSON.parse(info);
@@ -69,8 +68,6 @@ class TestController {
         if (userId && schoolId && testTypeId){
             tests = await Test.findAndCountAll({where: {userId, schoolId, testTypeId}, limit, offset});
         }
-        console.log(1111111111111111111111111111111111111111111111111111111111111111111)
-        console.log(tests)
         return res.json(tests);
     }
 

@@ -39,11 +39,11 @@ const MainPage = observer(() => {
         </Col>
           <TestList/>
       </Form>
-        {test.schools.map(el =>
-            <div>
-                {el.name}
-            </div>
-        )}
+        {/*{test.schools.map(el =>*/}
+        {/*    <div>*/}
+        {/*        {el.name}*/}
+        {/*    </div>*/}
+        {/*)}*/}
     </Container>
 
   );

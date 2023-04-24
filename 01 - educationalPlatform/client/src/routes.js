@@ -12,7 +12,8 @@ import {
     MAIN_ROUTE,
     REGISTRATION_ROUTE,
     TEST_ROUTE,
-    USER_INFORMATION_ROUTE
+    USER_INFORMATION_ROUTE,
+    USER_TEST_RESULT_ROUTE
 } from "./utils/const"
 import UserPage from "./pages/userPage/UserPage";
 
@@ -29,8 +30,12 @@ export const authRoutes = [
     },
     {
         path: USER_INFORMATION_ROUTE,
-        Component: UserPage //компонент админа
-    }
+        Component: UserPage
+    },
+    // {
+    //     path: USER_TEST_RESULT_ROUTE,
+    //     Component: UseTestResult
+    // }
 ]
 //масив с маршрутами для любого пользователя
 export const publicRoutes = [
